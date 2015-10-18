@@ -18,7 +18,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		return 0;
 
 	/* load keyboard accelerator */
-	HACCEL keyboardAccel = LoadAccelerators(hInstance, "");
+	HACCEL keyboardAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCEL));
 	if( keyboardAccel == NULL )
 		return 0;
 	
@@ -63,13 +63,6 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 			/* system command */
 			switch( wParam ) {
 
-				/* window moved */
-				case SC_MOVE:
-
-					/* provide default move functionality*/
-					DefWindowProc(mainWindow, mainWindowMessage, wParam, lParam);
-					break;
-
 				/* minimize button hit */
 				case SC_MINIMIZE:
 
@@ -98,6 +91,11 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 					ShowWindow(mainWindow, SW_RESTORE);
 					break;
 
+				/* default handler */
+				default:
+					return DefWindowProc(mainWindow, mainWindowMessage, wParam, lParam);
+					break;
+
 			}
 
 			break;
@@ -114,6 +112,10 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 					/* show the configuration window*/
 					ShowWindow(mainWindow, SW_SHOW);
 					break;
+				
+				/* default handler */
+				default:
+					return DefWindowProc(mainWindow, mainWindowMessage, wParam, lParam);
 
 			}
 
@@ -154,6 +156,8 @@ int initMainWindow(HINSTANCE hInstance) {
 	mainWindowClass.lpfnWndProc = mainWindowCallback;
 	mainWindowClass.hInstance = hInstance;
 	mainWindowClass.lpszClassName = mainWindowClassName;
+	mainWindowClass.style = CS_HREDRAW | CS_VREDRAW;
+	mainWindowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 
 	/* register main window class */
 	RegisterClass(&mainWindowClass);
@@ -179,6 +183,7 @@ int initMainWindow(HINSTANCE hInstance) {
 
 	/* show window initially hidden */
 	ShowWindow(mainWindow, SW_HIDE);
+	UpdateWindow(mainWindow);
 
 	/* return OK */
 	return 0;
