@@ -1,20 +1,22 @@
 #pragma once
 
-class notifier {
+class NOTIFIER {
 
 public:
 
-	notifier();
-	~notifier();
+	NOTIFIER();
+	~NOTIFIER();
 
-	int showWindow();
+	int initialize(HINSTANCE, HWND);
+	int show();
 
 private:
 
+	bool notifierLive = false;
+
 	HWND notifierWindow;
 	WNDCLASS notifierWindowClass;
-
-	LRESULT CALLBACK notifierWindowCallback(HWND, UINT, WPARAM, LPARAM);
+	HINSTANCE appInstance;
 
 };
 

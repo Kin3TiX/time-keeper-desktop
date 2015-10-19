@@ -17,21 +17,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	if( initTrayIcon(hInstance) )
 		return 0;
 
+	/* create notifier window */
+	if( popUnderWindow.initialize(hInstance, mainWindow) )
+		return 0;
+
 	/* load keyboard accelerator */
 	HACCEL keyboardAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCEL));
 	if( keyboardAccel == NULL )
 		return 0;
 	
 	/* start message loop */
-	MSG mainWindowMessage = { };
-	while( GetMessage(&mainWindowMessage, NULL, 0, 0) ) {
+	MSG windowMessage = { };
+	while( GetMessage(&windowMessage, NULL, 0, 0) ) {
 
 		/* check for keyboard events*/
-		if( !TranslateAccelerator(mainWindow, keyboardAccel, &mainWindowMessage) ) {
+		if( !TranslateAccelerator(mainWindow, keyboardAccel, &windowMessage) ) {
 
 			/* no keyboard event, handle message */
-			TranslateMessage(&mainWindowMessage);
-			DispatchMessage(&mainWindowMessage);
+			TranslateMessage(&windowMessage);
+			DispatchMessage(&windowMessage);
 
 		}
 
@@ -111,6 +115,8 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 
 					/* show the configuration window*/
 					ShowWindow(mainWindow, SW_SHOW);
+					/* DEBUG */
+					popUnderWindow.show();
 					break;
 				
 				/* default handler */

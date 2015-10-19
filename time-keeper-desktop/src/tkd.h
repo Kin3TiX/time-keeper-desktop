@@ -1,6 +1,7 @@
 #pragma once
 
 #include "resource.h"
+#include "tkd-notifier.h"
 
 #ifndef UNICODE
 #define UNICODE
@@ -19,6 +20,7 @@ WNDCLASS mainWindowClass = { };
 NOTIFYICONDATA trayIcon;
 HWND mainWindow;
 HICON trayIconImage;
+NOTIFIER popUnderWindow;
 
 LRESULT CALLBACK mainWindowCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
