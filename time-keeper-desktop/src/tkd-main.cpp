@@ -162,15 +162,24 @@ int initMainWindow(HINSTANCE hInstance) {
 	/* register main window class */
 	RegisterClass(&mainWindowClass);
 
+	/* set main window size and location */
+	const HWND screen = GetDesktopWindow();
+	RECT screenSize;
+	GetWindowRect(screen, &screenSize);
+	int windowHeight = screenSize.bottom / 2;
+	int windowWidth = screenSize.right / 2;
+	int windowY = windowHeight / 2;
+	int windowX = windowWidth / 2;
+
 	/* create main window */
 	mainWindow = CreateWindowEx(0,
 								mainWindowClassName,
 								"Time Keeper Desktop",
 								WS_OVERLAPPEDWINDOW | WS_EX_TOOLWINDOW,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
-								CW_USEDEFAULT,
+								windowX,
+								windowY,
+								windowWidth,
+								windowHeight,
 								NULL,
 								NULL,
 								hInstance,

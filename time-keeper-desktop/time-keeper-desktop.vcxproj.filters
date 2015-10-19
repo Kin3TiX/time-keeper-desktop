@@ -24,12 +24,18 @@
     <ClInclude Include="src\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\tkd-notifier.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tkd-main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\tkd-pc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tkd-notifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
