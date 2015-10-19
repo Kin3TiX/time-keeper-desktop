@@ -21,6 +21,7 @@ NOTIFYICONDATA trayIcon;
 HWND mainWindow;
 HICON trayIconImage;
 NOTIFIER popUnderWindow;
+WNDCLASS notifierWindowClass;
 
 LRESULT CALLBACK mainWindowCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

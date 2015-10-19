@@ -7,16 +7,16 @@ public:
 	NOTIFIER();
 	~NOTIFIER();
 
-	int initialize(HINSTANCE, HWND);
+	int initialize(HINSTANCE, HWND, LPSTR);
 	int show();
 
 private:
 
-	bool notifierLive = false;
-
+	bool notifierLive;
 	HWND notifierWindow;
-	WNDCLASS notifierWindowClass;
 	HINSTANCE appInstance;
 
 };
+
+LRESULT CALLBACK notifierWindowCallback(HWND, UINT, WPARAM, LPARAM);
 

@@ -14,17 +14,35 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		return 0;
 
 	/* create tray icon */
-	if( initTrayIcon(hInstance) )
+	if( initTrayIcon(hInstance) ) {
+		Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 		return 0;
+	}
+
+	/* create pop under window class */
+	LPSTR notifierWindowClassName = "time-keeper-notif";
+
+	notifierWindowClass.lpfnWndProc = notifierWindowCallback;
+	notifierWindowClass.hInstance = hInstance;
+	notifierWindowClass.lpszClassName = notifierWindowClassName;
+	notifierWindowClass.style = CS_HREDRAW | CS_VREDRAW;
+	notifierWindowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
+
+	/* register pop under window class */
+	RegisterClass(&notifierWindowClass);
 
 	/* create notifier window */
-	if( popUnderWindow.initialize(hInstance, mainWindow) )
+	if( popUnderWindow.initialize(hInstance, mainWindow, notifierWindowClassName) ) {
+		Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 		return 0;
+	}
 
 	/* load keyboard accelerator */
 	HACCEL keyboardAccel = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCEL));
-	if( keyboardAccel == NULL )
+	if( keyboardAccel == NULL ) {
+		Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 		return 0;
+	}
 	
 	/* start message loop */
 	MSG windowMessage = { };
@@ -226,7 +244,10 @@ int initTrayIcon(HINSTANCE hInstance) {
 	trayIcon.uCallbackMessage = APP_TRAYICON;
 
 	/* add the icon */
+	Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 	Shell_NotifyIcon(NIM_ADD, &trayIcon);
+
+	int error = GetLastError();
 
 	/* return OK */
 	return 0;

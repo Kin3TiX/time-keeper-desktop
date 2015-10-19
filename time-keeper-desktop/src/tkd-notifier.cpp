@@ -1,8 +1,6 @@
 #include "tkd-pc.h"
 #include "tkd-notifier.h"
 
-LRESULT CALLBACK notifierWindowCallback(HWND, UINT, WPARAM, LPARAM);
-
 NOTIFIER::NOTIFIER() {
 
 }
@@ -13,20 +11,10 @@ NOTIFIER::~NOTIFIER() {
 
 }
 
-int NOTIFIER::initialize(HINSTANCE callingApp, HWND mainWindow) {
+int NOTIFIER::initialize(HINSTANCE callingApp, HWND mainWindow, LPSTR className) {
 
 	/* store application instance */
 	appInstance = callingApp;
-
-	/* create pop under window class */
-	LPSTR notifierWindowClassName = "time-keeper-desktop-notification";
-
-	notifierWindowClass.lpfnWndProc = notifierWindowCallback;
-	notifierWindowClass.hInstance = appInstance;
-	notifierWindowClass.lpszClassName = notifierWindowClassName;
-
-	/* register pop under window class */
-	RegisterClass(&notifierWindowClass);
 
 	/* set pop under window size and location */
 	const HWND screen = GetDesktopWindow();
@@ -39,14 +27,14 @@ int NOTIFIER::initialize(HINSTANCE callingApp, HWND mainWindow) {
 
 	/* create main window */
 	notifierWindow = CreateWindowEx(0,
-									notifierWindowClassName,
+									className,
 									"Time Keeper Notification",
 									WS_OVERLAPPEDWINDOW,
 									windowX,
 									windowY,
 									windowWidth,
 									windowHeight,
-									mainWindow,
+									NULL,
 									NULL,
 									appInstance,
 									NULL);
