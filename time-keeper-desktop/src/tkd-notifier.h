@@ -1,10 +1,12 @@
 #pragma once
 
+#include "resource.h"
+
 class NOTIFIER {
 
 public:
 
-	NOTIFIER(HINSTANCE, HWND);
+	NOTIFIER(HWND);
 	~NOTIFIER();
 
 	int initialize();
@@ -12,7 +14,7 @@ public:
 
 private:
 
-	bool notifierLive;
+	bool notifierLive = false;
 	HWND notifierWindow;
 	HINSTANCE appInstance;
 	HWND mainWindow;

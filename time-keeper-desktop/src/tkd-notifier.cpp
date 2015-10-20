@@ -1,9 +1,9 @@
 #include "tkd-pc.h"
 #include "tkd-notifier.h"
 
-NOTIFIER::NOTIFIER(HINSTANCE caller, HWND main) {
+NOTIFIER::NOTIFIER(HWND main) {
 
-	appInstance = caller;
+	appInstance = (HINSTANCE) (GetWindowLongPtr(main, GWLP_HINSTANCE));
 	mainWindow = main;
 
 }
@@ -16,26 +16,31 @@ NOTIFIER::~NOTIFIER() {
 
 int NOTIFIER::initialize() {
 
-	WNDCLASS notifierWindowClass = { };
+	WNDCLASS notifierWindowClass = { 0 };
 
 	/* create pop under window class */
 	LPSTR notifierWindowClassName = "time-keeper-notif";
 
+	notifierWindowClass.cbClsExtra = 0;
+	notifierWindowClass.cbWndExtra = 0;
+	notifierWindowClass.hCursor = LoadCursor(0, IDC_ARROW);
+	notifierWindowClass.hIcon = LoadIcon(0, IDI_WINLOGO);
+	notifierWindowClass.lpszMenuName = 0;
+	notifierWindowClass.style = 0;
+	notifierWindowClass.hbrBackground = 0;
 	notifierWindowClass.lpfnWndProc = notifierWindowCallback;
 	notifierWindowClass.hInstance = appInstance;
 	notifierWindowClass.lpszClassName = notifierWindowClassName;
-	notifierWindowClass.style = CS_HREDRAW | CS_VREDRAW;
-	notifierWindowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
 
 	/* register pop under window class */
-	RegisterClass(&notifierWindowClass);
+	if( !RegisterClass(&notifierWindowClass) )
+		return 1;
 
 	/* set pop under window size and location */
-	const HWND screen = GetDesktopWindow();
 	RECT screenSize;
-	GetWindowRect(screen, &screenSize);
+	SystemParametersInfo(SPI_GETWORKAREA, 0, &screenSize, 0);
 	int windowHeight = screenSize.bottom / 10;
-	int windowWidth = screenSize.right / 10;
+	int windowWidth = screenSize.right / 7;
 	int windowY = screenSize.bottom - windowHeight - 5;
 	int windowX = screenSize.right - windowWidth - 5;
 
@@ -43,7 +48,7 @@ int NOTIFIER::initialize() {
 	notifierWindow = CreateWindowEx(0,
 									notifierWindowClassName,
 									"Time Keeper Notification",
-									WS_OVERLAPPEDWINDOW,
+									WS_POPUPWINDOW,
 									windowX,
 									windowY,
 									windowWidth,
@@ -59,10 +64,6 @@ int NOTIFIER::initialize() {
 		return 1;
 	}
 
-	/* show window initially hidden */
-	ShowWindow(notifierWindow, SW_HIDE);
-	UpdateWindow(notifierWindow);
-
 	/* set window status flag */
 	notifierLive = true;
 
@@ -72,7 +73,7 @@ int NOTIFIER::initialize() {
 
 int NOTIFIER::show() {
 
-	AnimateWindow(notifierWindow, 200, AW_ACTIVATE | AW_SLIDE | AW_VER_NEGATIVE);
+	AnimateWindow(notifierWindow, 100, AW_ACTIVATE | AW_SLIDE | AW_VER_NEGATIVE);
 
 	return 0;
 
@@ -80,8 +81,6 @@ int NOTIFIER::show() {
 
 LRESULT CALLBACK notifierWindowCallback(HWND notifierWindow, UINT notifierMessage, WPARAM wParam, LPARAM lParam) {
 
-	DefWindowProc(notifierWindow, notifierMessage, wParam, lParam);
-	
-	return 0;
+	return DefWindowProc(notifierWindow, notifierMessage, wParam, lParam);
 
 }

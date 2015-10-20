@@ -4,6 +4,11 @@
 #include "tkd-pc.h"
 #include "tkd.h"
 
+NOTIFYICONDATA trayIcon;
+HWND mainWindow;
+HICON trayIconImage;
+NOTIFIER * popUnderWindow;
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* application entry point ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -19,7 +24,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		return 0;
 	}
 
-	popUnderWindow = new NOTIFIER(hInstance, mainWindow);
+	popUnderWindow = new NOTIFIER(mainWindow);
 
 	/* create notifier window */
 	if( popUnderWindow->initialize() ) {
@@ -167,8 +172,8 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 int initMainWindow(HINSTANCE hInstance) {
 
 	/* create main window class */
+	WNDCLASS mainWindowClass = { 0 };
 	LPSTR mainWindowClassName = "time-keeper-desktop";
-
 	mainWindowClass.lpfnWndProc = mainWindowCallback;
 	mainWindowClass.hInstance = hInstance;
 	mainWindowClass.lpszClassName = mainWindowClassName;
@@ -239,7 +244,9 @@ int initTrayIcon(HINSTANCE hInstance) {
 	Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 	Shell_NotifyIcon(NIM_ADD, &trayIcon);
 
-	int error = GetLastError();
+	/* clear strange tray error */
+	if( GetLastError() == 1008 )
+		SetLastError(NO_ERROR);
 
 	/* return OK */
 	return 0;

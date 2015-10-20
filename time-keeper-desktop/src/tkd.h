@@ -16,12 +16,6 @@
 
 #define TRAYICON_ID 100
 
-WNDCLASS mainWindowClass = { };
-NOTIFYICONDATA trayIcon;
-HWND mainWindow;
-HICON trayIconImage;
-NOTIFIER * popUnderWindow;
-
 LRESULT CALLBACK mainWindowCallback(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int initMainWindow(HINSTANCE hInstance);
