@@ -11,6 +11,7 @@ NOTIFIER::NOTIFIER(HWND main) {
 
 NOTIFIER::~NOTIFIER() {
 
+	DestroyWindow(notifierWindow);
 
 }
 

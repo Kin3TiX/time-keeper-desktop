@@ -92,8 +92,8 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 				/* close button hit */
 				case SC_CLOSE:
 					
-					/* destroy window */
-					DestroyWindow(mainWindow);
+					/* hide the window if close button hit */
+					ShowWindow(mainWindow, SW_HIDE);
 					break;
 
 					/* maximize button hit */
@@ -130,9 +130,14 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 
 					/* show the configuration window*/
 					ShowWindow(mainWindow, SW_SHOW);
-					/* DEBUG */
-					popUnderWindow->show();
 					break;
+
+				/* tray icon right clicked, show menu */
+				case WM_RBUTTONDOWN:
+				case WM_CONTEXTMENU:
+
+					/* context menu routine */
+					displayContextMenu(mainWindow);
 				
 				/* default handler */
 				default:
@@ -142,6 +147,7 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 
 			break;
 
+		/* paint the main window */
 		case WM_PAINT:
 
 			/* repaint the window area */
@@ -153,6 +159,26 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 			}
 			break;
 
+		/* receive commands */
+		case WM_COMMAND:
+
+			/* switch menu item */
+			switch( LOWORD(lParam) ) {
+
+				// TODO: Comments
+				case MSG_SHOWCONFIG:
+					ShowWindow(mainWindow);
+					break;
+				case MSG_QUIT:
+					DestroyWindow(mainWindow);
+					break;
+				case MSG_DEBUG:
+					popUnderWindow->show();
+					break;
+
+			}
+			break;
+
 		/* unknown message, dispatch default handler */
 		default:
 
@@ -161,8 +187,7 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 
 	}
 
-	/* return OK */
-	return 0;
+	return DefWindowProc(mainWindow, mainWindowMessage, wParam, lParam);;
 
 }
 
@@ -249,6 +274,13 @@ int initTrayIcon(HINSTANCE hInstance) {
 		SetLastError(NO_ERROR);
 
 	/* return OK */
+	return 0;
+
+}
+
+int displayContextMenu(HWND hWnd) {
+
+
 	return 0;
 
 }
