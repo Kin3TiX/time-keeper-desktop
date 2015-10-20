@@ -165,13 +165,17 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 			/* switch menu item */
 			switch( LOWORD(lParam) ) {
 
-				// TODO: Comments
+				/* show the configuration (main) window */
 				case MSG_SHOWCONFIG:
-					ShowWindow(mainWindow);
+					ShowWindow(mainWindow, SW_SHOW);
 					break;
+
+				/* quit the application */
 				case MSG_QUIT:
 					DestroyWindow(mainWindow);
 					break;
+
+				/* debug item to allow the popUnder to be displayed */
 				case MSG_DEBUG:
 					popUnderWindow->show();
 					break;
@@ -280,6 +284,11 @@ int initTrayIcon(HINSTANCE hInstance) {
 
 int displayContextMenu(HWND hWnd) {
 
+	HMENU contextMenu;
+
+	SetForegroundWindow(mainWindow);
+	//TODO: finish context menu
+	//TrackPopupMenu(contextMenu,
 
 	return 0;
 
