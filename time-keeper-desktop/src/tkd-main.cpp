@@ -19,20 +19,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		return 0;
 	}
 
-	/* create pop under window class */
-	LPSTR notifierWindowClassName = "time-keeper-notif";
-
-	notifierWindowClass.lpfnWndProc = notifierWindowCallback;
-	notifierWindowClass.hInstance = hInstance;
-	notifierWindowClass.lpszClassName = notifierWindowClassName;
-	notifierWindowClass.style = CS_HREDRAW | CS_VREDRAW;
-	notifierWindowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);
-
-	/* register pop under window class */
-	RegisterClass(&notifierWindowClass);
+	popUnderWindow = new NOTIFIER(hInstance, mainWindow);
 
 	/* create notifier window */
-	if( popUnderWindow.initialize(hInstance, mainWindow, notifierWindowClassName) ) {
+	if( popUnderWindow->initialize() ) {
 		Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 		return 0;
 	}
@@ -58,6 +48,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 		}
 
 	}
+
+	delete(popUnderWindow);
 
 	/* return OK;*/
 	return 0;
@@ -134,7 +126,7 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 					/* show the configuration window*/
 					ShowWindow(mainWindow, SW_SHOW);
 					/* DEBUG */
-					popUnderWindow.show();
+					popUnderWindow->show();
 					break;
 				
 				/* default handler */

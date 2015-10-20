@@ -4,10 +4,10 @@ class NOTIFIER {
 
 public:
 
-	NOTIFIER();
+	NOTIFIER(HINSTANCE, HWND);
 	~NOTIFIER();
 
-	int initialize(HINSTANCE, HWND, LPSTR);
+	int initialize();
 	int show();
 
 private:
@@ -15,6 +15,7 @@ private:
 	bool notifierLive;
 	HWND notifierWindow;
 	HINSTANCE appInstance;
+	HWND mainWindow;
 
 };
 
