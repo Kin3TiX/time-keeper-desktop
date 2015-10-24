@@ -138,6 +138,7 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 
 					/* context menu routine */
 					displayContextMenu(mainWindow);
+					break;
 				
 				/* default handler */
 				default:
@@ -163,7 +164,7 @@ LRESULT CALLBACK mainWindowCallback(HWND mainWindow, UINT mainWindowMessage, WPA
 		case WM_COMMAND:
 
 			/* switch menu item */
-			switch( LOWORD(lParam) ) {
+			switch( LOWORD(wParam) ) {
 
 				/* show the configuration (main) window */
 				case MSG_SHOWCONFIG:
@@ -273,6 +274,12 @@ int initTrayIcon(HINSTANCE hInstance) {
 	Shell_NotifyIcon(NIM_DELETE, &trayIcon);
 	Shell_NotifyIcon(NIM_ADD, &trayIcon);
 
+	/* animate the context menu */
+	bool menuAnimation = true;
+	bool menuFade = false;
+	SystemParametersInfo(SPI_SETMENUANIMATION, 0, &menuAnimation, 0);
+	SystemParametersInfo(SPI_SETMENUFADE, 0, &menuFade, 0);
+	
 	/* clear strange tray error */
 	if( GetLastError() == 1008 )
 		SetLastError(NO_ERROR);
@@ -282,13 +289,36 @@ int initTrayIcon(HINSTANCE hInstance) {
 
 }
 
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* display right click context menu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 int displayContextMenu(HWND hWnd) {
 
-	HMENU contextMenu;
+	/* create the context menu */
+	HMENU contextMenu = CreatePopupMenu();
+	AppendMenu(contextMenu, MF_STRING, MSG_SHOWCONFIG, "Configure");
+	AppendMenu(contextMenu, MF_STRING, MSG_DEBUG, "DEBUG");
+	AppendMenu(contextMenu, MF_SEPARATOR, 0, NULL);
+	AppendMenu(contextMenu, MF_STRING, MSG_QUIT, "Exit");
 
+	/* set the application menu on top */
 	SetForegroundWindow(mainWindow);
-	//TODO: finish context menu
-	//TrackPopupMenu(contextMenu,
+
+	/* get cursor position for displaying the menu */
+	POINT cursorPos;
+	GetCursorPos(&cursorPos);
+
+	/* track user selection */
+	TrackPopupMenuEx(contextMenu, 
+				   TPM_BOTTOMALIGN | TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_VERNEGANIMATION,
+				   cursorPos.x,
+				   cursorPos.y,
+				   mainWindow,
+				   NULL);
+
+	/* destroy the menu */
+	DestroyMenu(contextMenu);
 
 	return 0;
 
