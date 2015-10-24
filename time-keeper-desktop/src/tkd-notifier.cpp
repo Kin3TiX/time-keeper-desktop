@@ -5,9 +5,9 @@ NOTIFIER::NOTIFIER(HWND main) {
 
 	appInstance = (HINSTANCE) (GetWindowLongPtr(main, GWLP_HINSTANCE));
 	mainWindow = main;
+	visible = false;
 
 }
-
 
 NOTIFIER::~NOTIFIER() {
 
@@ -75,6 +75,16 @@ int NOTIFIER::initialize() {
 int NOTIFIER::show() {
 
 	AnimateWindow(notifierWindow, 100, AW_ACTIVATE | AW_SLIDE | AW_VER_NEGATIVE);
+	visible = true;
+
+	return 0;
+
+}
+
+int NOTIFIER::hide() {
+
+	ShowWindow(notifierWindow, SW_HIDE);
+	visible = false;
 
 	return 0;
 

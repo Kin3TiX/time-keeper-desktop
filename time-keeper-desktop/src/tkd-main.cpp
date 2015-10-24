@@ -8,6 +8,7 @@ NOTIFYICONDATA trayIcon;
 HWND mainWindow;
 HICON trayIconImage;
 NOTIFIER * popUnderWindow;
+TIMEKEEPER * scheduler;
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* application entry point ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -25,6 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 	}
 
 	popUnderWindow = new NOTIFIER(mainWindow);
+	scheduler = new TIMEKEEPER(*popUnderWindow);
 
 	/* create notifier window */
 	if( popUnderWindow->initialize() ) {
@@ -54,6 +56,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 
 	}
 
+	delete(scheduler);
 	delete(popUnderWindow);
 
 	/* return OK;*/

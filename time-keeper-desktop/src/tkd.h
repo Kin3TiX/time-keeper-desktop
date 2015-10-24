@@ -2,6 +2,7 @@
 
 #include "resource.h"
 #include "tkd-notifier.h"
+#include "tkd-timekeeper.h"
 
 #ifndef UNICODE
 #define UNICODE

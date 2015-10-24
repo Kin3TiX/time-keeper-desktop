@@ -11,6 +11,9 @@ public:
 
 	int initialize();
 	int show();
+	int hide();
+
+	bool visible;
 
 private:
 
