@@ -4,6 +4,7 @@
 #include "tkd-pc.h"
 #include "tkd.h"
 
+/* global data members */
 NOTIFYICONDATA trayIcon;
 HWND mainWindow;
 HICON trayIconImage;
@@ -56,6 +57,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, int nCmdShow
 
 	}
 
+	/* delete the asynchronous timer and the notifier */
 	delete(scheduler);
 	delete(popUnderWindow);
 

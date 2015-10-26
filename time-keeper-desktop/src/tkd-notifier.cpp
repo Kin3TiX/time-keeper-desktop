@@ -1,27 +1,37 @@
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* notifier implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #include "tkd-pc.h"
 #include "tkd-notifier.h"
 
+/* notifier window procedure callback */\
+/* can this be a static member function instead?? */
+LRESULT CALLBACK notifierWindowCallback(HWND, UINT, WPARAM, LPARAM);
+
+/* constructor */
 NOTIFIER::NOTIFIER(HWND main) {
 
+	/* set application instance, store parent window and visible flag false */
 	appInstance = (HINSTANCE) (GetWindowLongPtr(main, GWLP_HINSTANCE));
 	mainWindow = main;
 	visible = false;
 
 }
 
+/* destructor */
 NOTIFIER::~NOTIFIER() {
 
+	/* destroy the notifier window itself */
 	DestroyWindow(notifierWindow);
 
 }
 
+/* initialize the notifier */
 int NOTIFIER::initialize() {
 
-	WNDCLASS notifierWindowClass = { 0 };
-
 	/* create pop under window class */
+	WNDCLASS notifierWindowClass = { 0 };
 	LPSTR notifierWindowClassName = "time-keeper-notif";
-
 	notifierWindowClass.cbClsExtra = 0;
 	notifierWindowClass.cbWndExtra = 0;
 	notifierWindowClass.hCursor = LoadCursor(0, IDC_ARROW);
@@ -49,7 +59,7 @@ int NOTIFIER::initialize() {
 	notifierWindow = CreateWindowEx(0,
 									notifierWindowClassName,
 									"Time Keeper Notification",
-									WS_POPUPWINDOW,
+									WS_POPUPWINDOW | WS_EX_TOOLWINDOW,
 									windowX,
 									windowY,
 									windowWidth,
@@ -72,8 +82,10 @@ int NOTIFIER::initialize() {
 
 }
 
+/* show the notifier window */
 int NOTIFIER::show() {
 
+	/* slide the window in from the bottom */
 	AnimateWindow(notifierWindow, 100, AW_ACTIVATE | AW_SLIDE | AW_VER_NEGATIVE);
 	visible = true;
 
@@ -81,8 +93,10 @@ int NOTIFIER::show() {
 
 }
 
+/* hide the notifier window */
 int NOTIFIER::hide() {
 
+	/* hide the window */
 	ShowWindow(notifierWindow, SW_HIDE);
 	visible = false;
 
@@ -90,8 +104,10 @@ int NOTIFIER::hide() {
 
 }
 
+/* notifier popup window procedure callback */
 LRESULT CALLBACK notifierWindowCallback(HWND notifierWindow, UINT notifierMessage, WPARAM wParam, LPARAM lParam) {
 
+	/* return default functionality (NEEDS IMPLEMENTATION) */
 	return DefWindowProc(notifierWindow, notifierMessage, wParam, lParam);
 
 }
