@@ -22,6 +22,9 @@ public:
 	/* notifier visible flag */
 	bool visible;
 
+	/* notifier window activity flag */
+	bool active;
+
 	/* private members */
 private:
 

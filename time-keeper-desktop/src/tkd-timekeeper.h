@@ -30,8 +30,8 @@ private:
 	DWORD loggerThreadID;
 	bool configured;
 	bool destroy;
-	SYSTEMTIME currentTime;
-	SYSTEMTIME notifyTime;
+	ULONGLONG currentTime;
+	ULONGLONG notifyTime;
 	
 	/* private internal functions */
 	void initialize();
@@ -41,6 +41,7 @@ private:
 	int loggerThread();
 	bool checkTime();
 	int logData();
+	void getNextNotification();
 
 };
 

@@ -53,11 +53,9 @@ void TIMEKEEPER::initialize() {
 	destroy = false;
 
 	/* initialize current time */
-	GetSystemTime(&currentTime);
+	currentTime = GetTickCount();
 
-	/* DEBUG!! set notification time to current minute + 1 */
-	notifyTime = currentTime;
-	notifyTime.wMinute += 1;
+	getNextNotification();
 
 	/* launch asynchronous timer thread */
 	timer = CreateThread(NULL,
@@ -113,21 +111,21 @@ int TIMEKEEPER::timerThread() {
 		Sleep(100);
 
 		/* wake up, get current time */
-		GetSystemTime(&currentTime);
+		currentTime = GetTickCount64();
 
 		/* if there is a valid notifier set, and checktime() is true */
 		if( myNotifier && checkTime() ) {
 
 			/* if the notifier popup is visible, hide it */
-			if( myNotifier->visible )
+			if( myNotifier->visible ) {
 				myNotifier->hide();
+				getNextNotification();
+			
 			/* if the notifier popup is inivisible, show it */
-			else
+			} else {
 				myNotifier->show();
-
-			/* DEBUG!! set the next notify time to the current minute + 1 */
-			notifyTime = currentTime;
-			notifyTime.wMinute += 1;
+				getNextNotification();
+			}
 
 		}
 
@@ -157,17 +155,8 @@ int TIMEKEEPER::loggerThread() {
 /* check the current time to see if it matches the notifier time */
 bool TIMEKEEPER::checkTime() {
 
-	/* is today the notify day? */
-	bool day = (currentTime.wDay == notifyTime.wDay);
-	
-	/* is this hour the notify hour? */
-	bool hour = (currentTime.wHour == notifyTime.wHour);
-	
-	/* is this minute the notify minute? */
-	bool minute = (currentTime.wMinute == notifyTime.wMinute);
-
 	/* return yay or nay */
-	return day && hour && minute;
+	return currentTime >= notifyTime;
 
 }
 
@@ -175,5 +164,26 @@ bool TIMEKEEPER::checkTime() {
 int TIMEKEEPER::logData() {
 
 	return 0;
+
+}
+
+/* set the next notify time based on user settings */
+void TIMEKEEPER::getNextNotification() {
+
+	/* set current time */
+	notifyTime = GetTickCount64();
+
+	/* increment time based on operation */
+	if( myNotifier->visible ) {
+
+		/* notifier popup is visible, hide it in 45 seconds */
+		notifyTime += 4500;
+
+	} else {
+
+		/* show again in 1 hour */
+		notifyTime += 3600000;
+
+	}
 
 }
