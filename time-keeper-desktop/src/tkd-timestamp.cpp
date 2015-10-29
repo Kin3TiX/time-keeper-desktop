@@ -4,15 +4,23 @@
 #include "tkd-timestamp.h"
 
 /* constructor */
-TIMESTAMP::TIMESTAMP(SYSTEMTIME initialTime) { 
-
-	/* set myTime to provided time */
-	myTime = initialTime;
-
-}
+TIMESTAMP::TIMESTAMP(SYSTEMTIME initialTime) : myTime(initialTime) { }
 
 /* destructor */
 TIMESTAMP::~TIMESTAMP() { }
+
+/* assign one timestamp to another */
+void TIMESTAMP::operator=(const TIMESTAMP & other) {
+
+
+}
+
+/* compare two timestampes for equality */
+bool TIMESTAMP::operator==(const TIMESTAMP & other) {
+
+	return false;
+
+}
 
 /* increment state of internal timestamp according to mode and value */
 void TIMESTAMP::incrementTime(mode incrementMode, unsigned int incrementValue) { 

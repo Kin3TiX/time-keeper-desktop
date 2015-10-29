@@ -14,7 +14,6 @@ public:
 	unsigned char day;
 	unsigned char hour;
 	unsigned char minute;
-	SYSTEMTIME myTime;
 
 	/* mode enumeration */
 	enum mode {
@@ -25,11 +24,18 @@ public:
 	TIMESTAMP(SYSTEMTIME);
 	~TIMESTAMP();
 
+	/* operator overloads */
+	void operator=(const TIMESTAMP & other);
+	bool operator==(const TIMESTAMP & other);
+
 	/* increment time of timestamp */
 	void incrementTime(mode, unsigned int);
 
 	/* private members */
 private:
+
+	/* internal timestamp */
+	SYSTEMTIME myTime;
 
 	/* functions to increment timestamp */
 	void incrementMinutes(unsigned int);
