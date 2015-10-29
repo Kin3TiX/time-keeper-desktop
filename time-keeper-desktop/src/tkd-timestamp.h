@@ -10,11 +10,6 @@ class TIMESTAMP {
 	/* public members */
 public:
 
-	/* public data */
-	unsigned char day;
-	unsigned char hour;
-	unsigned char minute;
-
 	/* mode enumeration */
 	enum mode {
 		MIN, HOUR, DAY
@@ -41,6 +36,9 @@ private:
 	void incrementMinutes(unsigned int);
 	void incrementHours(unsigned int);
 	void incrementDays(unsigned int);
+
+	/* get time info */
+	void getTime(WORD *, WORD *, WORD *) const;
 
 };
 
