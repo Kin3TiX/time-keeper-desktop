@@ -128,6 +128,7 @@
     <ClInclude Include="src\tkd-notifier.h" />
     <ClInclude Include="src\tkd-pc.h" />
     <ClInclude Include="src\tkd-timekeeper.h" />
+    <ClInclude Include="src\tkd-timestamp.h" />
     <ClInclude Include="src\tkd.h" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +136,7 @@
     <ClCompile Include="src\tkd-notifier.cpp" />
     <ClCompile Include="src\tkd-pc.cpp" />
     <ClCompile Include="src\tkd-timekeeper.cpp" />
+    <ClCompile Include="src\tkd-timestamp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="time-keeper-desktop.rc">

@@ -30,6 +30,9 @@
     <ClInclude Include="src\tkd-timekeeper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\tkd-timestamp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\tkd-main.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\tkd-timekeeper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tkd-timestamp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
