@@ -38,7 +38,7 @@ private:
 	void incrementDays(unsigned int);
 
 	/* get time info */
-	void getTime(WORD *, WORD *, WORD *) const;
+	void getTime(WORD &, WORD &, WORD &) const;
 
 };
 

@@ -16,7 +16,7 @@ void TIMESTAMP::operator=(const TIMESTAMP & other) {
 	WORD hour;
 	WORD minute;
 
-	other.getTime(&day, &hour, &minute);
+	other.getTime(day, hour, minute);
 
 	myTime.wDay = day;
 	myTime.wHour = hour;
@@ -60,29 +60,48 @@ void TIMESTAMP::incrementTime(mode incrementMode, unsigned int incrementValue) {
 }
 
 /* increment minutes of timestamp */
-void TIMESTAMP::incrementMinutes(unsigned int) { 
+void TIMESTAMP::incrementMinutes(unsigned int value) { 
 
+	unsigned int days = 0;
+	unsigned int hours = 0;
+	unsigned int minutes = 0;
+
+	/* minutes greater than 1 hour */
+	if( value > 60 ) {
+		hours = value % 60;
+		minutes = value - (hours * 60);
+
+		/* hours greater than 1 day */
+		if( hours > 24 ) {
+			days = hours % 24;
+			hours = hours - (days * 24);
+		}
+
+	/* minutes less than 1 hour */
+	} else {
+		minutes = value;
+	}
 
 }
 
 /* increment hours of timestamp */
-void TIMESTAMP::incrementHours(unsigned int) { 
+void TIMESTAMP::incrementHours(unsigned int value) {
 
 
 }
 
 /* increment days of timestamp */
-void TIMESTAMP::incrementDays(unsigned int) { 
+void TIMESTAMP::incrementDays(unsigned int value) {
 
 
 }
 
 /* pass back time parameters */
-void TIMESTAMP::getTime(WORD * day, WORD * hour, WORD * min) const { 
+void TIMESTAMP::getTime(WORD & day, WORD & hour, WORD & min) const { 
 
 	/* set outputs to internal timestamp parameters */
-	*day = myTime.wDay;
-	*hour = myTime.wHour;
-	*min = myTime.wMinute;
+	day = myTime.wDay;
+	hour = myTime.wHour;
+	min = myTime.wMinute;
 
 }
