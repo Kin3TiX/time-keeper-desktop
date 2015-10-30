@@ -2,8 +2,8 @@
 /* time keeper interface ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #pragma once
-#include "tkd-pc.h"
 #include "tkd-notifier.h"
+#include "tkd-timestamp.h"
 
 /* time keeper class definition */
 class TIMEKEEPER {
@@ -31,8 +31,8 @@ private:
 	DWORD loggerThreadID;
 	bool configured;
 	bool destroy;
-	ULONGLONG currentTime;
-	ULONGLONG notifyTime;
+	TIMESTAMP currentTime;
+	TIMESTAMP notifyTime;
 	
 	/* private internal functions */
 	void initialize();

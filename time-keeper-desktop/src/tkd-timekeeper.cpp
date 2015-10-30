@@ -1,6 +1,7 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* time keeper implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#include "tkd-pc.h"
 #include "tkd-timekeeper.h"
 
 /* default constructor */
@@ -50,9 +51,6 @@ void TIMEKEEPER::initialize() {
 
 	/* reset thread stop flag */
 	destroy = false;
-
-	/* initialize current time */
-	currentTime = GetTickCount();
 
 	getNextNotification();
 
@@ -110,7 +108,7 @@ int TIMEKEEPER::timerThread() {
 		Sleep(100);
 
 		/* wake up, get current time */
-		currentTime = GetTickCount64();
+		currentTime.setCurrentTime();
 
 		/* if there is a valid notifier set, and checktime() is true */
 		if( myNotifier && checkTime() ) {
@@ -155,7 +153,7 @@ int TIMEKEEPER::loggerThread() {
 bool TIMEKEEPER::checkTime() {
 
 	/* return yay or nay */
-	return currentTime >= notifyTime;
+	return currentTime == notifyTime;
 
 }
 
@@ -170,18 +168,18 @@ int TIMEKEEPER::logData() {
 void TIMEKEEPER::getNextNotification() {
 
 	/* set current time */
-	notifyTime = GetTickCount64();
+	notifyTime.setCurrentTime();
 
 	/* increment time based on operation */
 	if( myNotifier->visible ) {
 
 		/* notifier popup is visible, hide it in 45 seconds */
-		notifyTime += 4500;
+		notifyTime.incrementTime(TIMESTAMP::MIN, 1);
 
 	} else {
 
 		/* show again in 1 hour */
-		notifyTime += 3600000;
+		notifyTime.incrementTime(TIMESTAMP::MIN, 1);
 
 	}
 

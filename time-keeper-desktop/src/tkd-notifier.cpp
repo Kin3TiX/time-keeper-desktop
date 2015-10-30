@@ -1,9 +1,10 @@
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* notifier implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+#include "tkd-pc.h"
 #include "tkd-notifier.h"
 
-/* notifier window procedure callback */\
+/* notifier window procedure callback */
 /* can this be a static member function instead?? */
 LRESULT CALLBACK notifierWindowCallback(HWND, UINT, WPARAM, LPARAM);
 
@@ -58,7 +59,7 @@ int NOTIFIER::initialize() {
 	notifierWindow = CreateWindowEx(0,
 									notifierWindowClassName,
 									"Time Keeper Notification",
-									WS_POPUPWINDOW | WS_EX_TOOLWINDOW,
+									(WS_POPUPWINDOW | WS_EX_TOOLWINDOW),
 									windowX,
 									windowY,
 									windowWidth,
@@ -73,6 +74,19 @@ int NOTIFIER::initialize() {
 		notifierLive = false;
 		return 1;
 	}
+
+	/* make the popup topmost */
+	SetWindowPos(notifierWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+	/* remove the taskbar icon */
+	long style = GetWindowLong(notifierWindow, GWL_STYLE);
+	style &= ~(WS_VISIBLE);
+	style |= WS_EX_TOOLWINDOW;
+	style &= ~(WS_EX_APPWINDOW);
+	ShowWindow(notifierWindow, SW_HIDE);
+	SetWindowLong(notifierWindow, GWL_STYLE, style); // set the style
+	ShowWindow(notifierWindow, SW_SHOW);
+	ShowWindow(notifierWindow, SW_HIDE);
 
 	/* set window status flag */
 	notifierLive = true;

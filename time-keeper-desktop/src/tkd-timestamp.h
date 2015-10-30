@@ -2,7 +2,6 @@
 /* timestamp interface ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 #pragma once
-#include "tkd-pc.h"
 
 /* timestamp class definition */
 class TIMESTAMP {
@@ -12,11 +11,11 @@ public:
 
 	/* mode enumeration */
 	enum mode {
-		MIN, HOUR, DAY
+		SEC, MIN, HOUR, DAY
 	};
 
 	/* constructor, destructor */
-	TIMESTAMP(SYSTEMTIME);
+	TIMESTAMP();
 	~TIMESTAMP();
 
 	/* operator overloads */
@@ -25,6 +24,7 @@ public:
 
 	/* increment time of timestamp */
 	void incrementTime(mode, unsigned int);
+	void setCurrentTime();
 
 	/* private members */
 private:
@@ -33,9 +33,14 @@ private:
 	SYSTEMTIME myTime;
 
 	/* functions to increment timestamp */
+	void incrementSeconds(unsigned int);
 	void incrementMinutes(unsigned int);
 	void incrementHours(unsigned int);
 	void incrementDays(unsigned int);
+	void setDay(unsigned int);
+	void setHour(unsigned int);
+	void setMinute(unsigned int);
+	void setSecond(unsigned int);
 
 	/* get time info */
 	void getTime(WORD &, WORD &, WORD &) const;
